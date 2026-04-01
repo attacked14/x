@@ -1,0 +1,16 @@
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+<a href="javascript:window.open('https://www.amazon.com/','x');" onclick="startSpoof()" id="button">Spoof</a>
+</body>
+
+<script>
+document.getElementById('button').addEventListener('click', function() {
+document.body.innerHTML = ` <h1>This is not Amazon</h1>
+<input type="text" placeholder="Username" id="username"><br>
+<input type="password" placeholder="Password" id="password"><br>
+<button>Click me</button>`;
+});
+</script>
