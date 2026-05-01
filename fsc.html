@@ -1,0 +1,18 @@
+<script>
+function launchInPopup() {
+    window.open(location.href, "", "newWindow")
+}
+
+function rfs() {
+      document.documentElement.requestFullscreen();
+}
+</script>
+
+
+<button onmousedown="launchInPopup()">
+    Launch Main Window
+  </button>
+  
+  <button onmousedown="rfs()">
+    requestFullscreen
+  </button>
