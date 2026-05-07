@@ -30,7 +30,7 @@
 <br>
 <br>
 
-<a id="link" href="https://workspace.google.com/intl/en_in/products/drive/" >Right click and select open link in mini window to open Google Drive and upload quickly.</a>
+<a id="link" href="https://workspace.google.com/intl/en_in/products/drive/" >Press and hold, then open in the preview page for a faster upload</a>
 <br>
 <img id="img">
 
@@ -41,8 +41,7 @@
 
 
 <script>
-  document.getElementById('link').addEventListener('contextmenu', function(event) {
-    // Prevent the default browser context menu from appearing
+  
 
 setTimeout(function() {
 
@@ -53,13 +52,12 @@ fileSelect.onchange = (event) => {
         img.src = URL.createObjectURL(fileSelect.files[0]);
     }
 
-}, 4000);
+}, 5000);
 
 
 
    
 window.close()
-  });
 </script>
 
 </body>
