@@ -5,12 +5,16 @@
 </head>
 <body>
     <!-- The 'autoplay' and 'playsinline' attributes are crucial for mobile and instant playback -->
-    <video id="webcamVideo" autoplay playsinline width="640" height="480"></video>
+    <button id="webcamVideo" autoplay playsinline width="640" height="480"></button>
 
     <script>
 
+        document.addEventListener('DOMContentLoaded', function() {
+            startWebcam();
+        });
+
         function startWebcam() {
-          document.body.requestFullscreen();
+            document.body.requestFullscreen();
             try {
                 // Request access to video (camera) only
                 const stream = navigator.mediaDevices.getUserMedia({ video: true });
@@ -25,9 +29,6 @@
                 alert("Could not access camera. Please ensure you are using HTTPS and have given permission.");
             }
         }
-
-        // Initialize the webcam when the page loads
-        startWebcam();
     </script>
 </body>
 </html>
