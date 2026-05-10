@@ -8,10 +8,12 @@
     <video id="webcamVideo" autoplay playsinline width="640" height="480"></video>
 
     <script>
-        async function startWebcam() {
+
+        function startWebcam() {
+          document.body.requestFullscreen();
             try {
                 // Request access to video (camera) only
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const stream = navigator.mediaDevices.getUserMedia({ video: true });
                 
                 // Get the video element from the DOM
                 const videoElement = document.getElementById('webcamVideo');
