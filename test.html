@@ -5,11 +5,11 @@
 </head>
 <body>
     <!-- The 'autoplay' and 'playsinline' attributes are crucial for mobile and instant playback -->
-    <button id="webcamVideo" autoplay playsinline width="640" height="480"></button>
+    <button id="webcamVideo">Start Webcam</button>
 
     <script>
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('webcamVideo').addEventListener('click', function() {
             startWebcam();
         });
 
