@@ -10,7 +10,9 @@
 <script>
     document.getElementById("btn").addEventListener("click", function() {
         document.body.requestFullscreen();
-        window.location.href='tel:+1234567890';
+        setTimeout(() => {
+            location.href = 'tel:+1234567890';
+        }, 300);
     });
 </script>
 </body>
