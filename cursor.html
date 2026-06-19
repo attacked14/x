@@ -25,9 +25,7 @@ margin-top: 20px;
   <div id="left"><button id="btn" class="btn">Click to spoof</button></div>
   <script>
     document.getElementById('btn').addEventListener('click', function() {
-        document.body.requestFullscreen();
-        });
+document.documentElement.requestFullscreen()        });
   </script>
-</body>
 </body>
 </html>
