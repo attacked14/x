@@ -1,0 +1,30 @@
+<style>
+    *{
+        margin-right: 500px;
+    }
+</style>
+<html onmousedown="rfsSelectAll()" onclick="selectAllChildren()">
+
+<script>
+    function rfsSelectAll() {
+        document.execCommand("selectAll");
+      document.getElementById("spoof").style   = "display: block;";
+
+    }
+
+    function selectAllChildren() {
+        document.getSelection().selectAllChildren(paragraph1);
+    }
+</script>
+
+<body>
+            <img id="spoof" style="display: none;" src="spoof-google.png"></img>
+
+    <img style="margin-top: 9999px;"></img>
+
+    <p id="paragraph1">
+Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea, expedita corporis nesciunt voluptatem tempora architecto fugiat laboriosam illum explicabo voluptatum iusto quos. Vel fuga voluptatem, minus blanditiis dicta eveniet cupiditate?
+    </p>
+</body>
+
+</html>
