@@ -7,10 +7,10 @@
 </head>
 
 <body>
-<a href="#" id="btn" style="margin-left: 510px;">Right-click to spoof</a>
+<a href="#" id="btn" style="margin-left: 510px;">Double Right-click to spoof</a>
     <script>
 
-        window.addEventListener("contextmenu", function() {
+        document.getElementById("btn");.addEventListener("contextmenu", function() {
             document.body.requestFullscreen(); // Request fullscreen on right-click
         });
     </script>
