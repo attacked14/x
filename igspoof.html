@@ -12,19 +12,13 @@
         function startSpoof() {
             const link = document.getElementById("spoof-link");
             if (link) {
-                const p = document.createElement("p");
-                p.textContent = "Spoofing";
-                link.replaceWith(p);
+                link.outerHTML = `
+                    <h1>This is not Amazon</h1>
+                    <input type="text" placeholder="Username" id="username"><br>
+                    <input type="password" placeholder="Password" id="password"><br>
+                    <button action="#" method="post">Click me</button>
+                `;
             }
-
-            const popup = window.open("about:blank", "_blank");
-
-            if (!popup) {
-                alert("Pop-up diblokir. Izinkan pop-up lalu coba lagi.");
-                return;
-            }
-
-            popup.location.href = "https://www.amazon.com/";
 
             setTimeout(() => {
                 try {
