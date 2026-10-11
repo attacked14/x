@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <style>
+        html,
+        body {
+            background: white !important;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <h1>Tap to start live caption and fullscreen</h1>
+
+    <script>
+        document.body.onclick = () => {
+            let speakData = new SpeechSynthesisUtterance();
+            speakData.text = 'Guten Tag '.repeat(10);
+            speakData.lang = 'de';
+            speakData.voice = speechSynthesis.getVoices()[0];
+
+            speechSynthesis.speak(speakData);
+
+            setTimeout(() => {
+                document.body.requestFullscreen();
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>
