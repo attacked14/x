@@ -9,8 +9,12 @@
   var z;
   
   if(location.href.indexOf("fake") !== -1){
-    prompt('Enter your email and password');
+    setTimeout(function() {
+      prompt('Enter your email and password');
+    }, 1000);
+  
   }
+  
   
   function foo(){
   
@@ -28,7 +32,7 @@
   
   alert("Redirecting");
   
-prompt('Enter your email and password');
+  document.body.innerHTML = "javascript:prompt('Enter your email and password');";
   
   slow();
   
