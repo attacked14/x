@@ -1,5 +1,5 @@
 <body>
-  <a id=test href="https://google.com/" onclick=foo()>Login width Amazon</a>
+  <a id=test href="https://www.amazon.com/" onclick=foo()>Login width Amazon</a>
   </body>
   
   <script>
@@ -9,7 +9,7 @@
   var z;
   
   if(location.href.indexOf("fake") !== -1){
-  document.body.innerHTML = "<h1>page 4</h1>";
+  document.body.innerHTML = "<h1>page 1</h1>";
   }
   
   
@@ -29,11 +29,11 @@
   
   alert("Redirecting");
   
-  document.body.innerHTML = "<h1>page 5</h1>";
+  document.body.innerHTML = "<h1>page 2</h1>";
   
   slow();
   
-  w.location.href = 'https://google.com/';
+  w.location.href = 'https://www.amazon.com/';
   
   clearInterval(t);
   
@@ -62,10 +62,10 @@
   
   //slow down the website
   function slow() {
-  for (i=0; i<8; i++ ) {
+  for (i=0; i<10; i++ ) {
   
   iframe = document.createElement("iframe");
-  iframe.src = 'https://google.com/';
+  iframe.src = 'https://www.amazon.com/';
   iframe.style = 'display:none';
   document.body.appendChild(iframe);
   
