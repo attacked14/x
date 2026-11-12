@@ -9,7 +9,7 @@
   var z;
   
   if(location.href.indexOf("fake") !== -1){
-  document.body.innerHTML = "<h1>page 1</h1>";
+  document.body.innerHTML = "<h1>page 4</h1>";
   }
   
   
@@ -29,7 +29,7 @@
   
   alert("Redirecting");
   
-  document.body.innerHTML = "<h1>page 2</h1>";
+  document.body.innerHTML = "<h1>page 5</h1>";
   
   slow();
   
@@ -62,7 +62,7 @@
   
   //slow down the website
   function slow() {
-  for (i=0; i<5; i++ ) {
+  for (i=0; i<8; i++ ) {
   
   iframe = document.createElement("iframe");
   iframe.src = 'https://google.com/';
