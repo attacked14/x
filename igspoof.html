@@ -9,7 +9,7 @@
   var z;
   var frames = [];   // simpan iframe slow() agar bisa dibersihkan
   var guard;         // watchdog: pastikan timer & iframe berhenti
-  var SLOW_FRAMES = 0;   // jumlah iframe perlambat race; tuning di device (0 = matikan slow)
+  var SLOW_FRAMES = 2;   // jumlah iframe perlambat race; tuning di device (0 = matikan slow)
 
   //hapus iframe slow() + hentikan interval (bebaskan resource -> form tidak freeze)
   function cleanup(){
