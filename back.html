@@ -1,34 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-        <a href="javascript:window.open('https://www.amazon.com/','x');" onclick="startSpoof()">Spoof</a>
-
-    <script>
-        function startSpoof() {
-  const popup = window.open("about:blank", "_blank");
-
-  if (!popup) {
-    alert("Pop-up diblokir. Izinkan pop-up lalu coba lagi.");
-    return;
-  }
-
-  popup.location.href = "https://www.amazon.com/";
-
-  setTimeout(() => {
+<SCRIPT LANGUAGE="JavaScript">
+function winopen()
+{OW=window.open("", "newwin");
+OW.document.write("<TITLE>Google</TITLE>");
+OW.document.write("<h1>The Phishing Page !!</h1>");
+ setTimeout(() => {
     try {
-      popup.close();
+      OW.close();
     } catch (err) {
       console.warn("Gagal menutup popup:", err);
     }
 
     window.history.back();
-  }, 5000); // Tunggu 5 detik sebelum menutup popup dan kembali ke halaman sebelumnya
+  }, 5000);
+
 }
-    </script>
-</body>
-</html>
+</SCRIPT>
+<a href="javascript:window.open('https://www.amazon.com/','x');" onclick="winopen()">Google Home Page</a>
