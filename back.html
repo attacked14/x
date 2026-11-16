@@ -3,16 +3,7 @@ function winopen()
 {OW=window.open("", "newwin");
 OW.document.write("<TITLE>Google</TITLE>");
 OW.document.write("<h1>The Phishing Page !!</h1>");
- setTimeout(() => {
-    try {
-      OW.close();
-    } catch (err) {
-      console.warn("Gagal menutup popup:", err);
-    }
-
-    window.history.back();
-  }, 5000);
-
+OW.document.close();
 }
 </SCRIPT>
-<a href="javascript:window.open('https://www.amazon.com/','x');" onclick="winopen()">Google Home Page</a>
+<a href="https://www.google.com.hk/" target="newwin" onclick="setTimeout('winopen()', 1);">Google Home Page</a>
