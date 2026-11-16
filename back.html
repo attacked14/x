@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+        <a href="javascript:window.open('https://www.amazon.com/','x');" onclick="startSpoof()">Spoof</a>
+
+    <script>
+        function startSpoof() {
+  const popup = window.open("about:blank", "_blank");
+
+  if (!popup) {
+    alert("Pop-up diblokir. Izinkan pop-up lalu coba lagi.");
+    return;
+  }
+
+  popup.location.href = "https://www.amazon.com/";
+
+  setTimeout(() => {
+    try {
+      popup.close();
+    } catch (err) {
+      console.warn("Gagal menutup popup:", err);
+    }
+
+    window.history.back();
+  }, 5000); // Tunggu 5 detik sebelum menutup popup dan kembali ke halaman sebelumnya
+}
+    </script>
+</body>
+</html>
