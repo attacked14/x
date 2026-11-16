@@ -1,26 +1,18 @@
-<script language="JavaScript">
-function winopen(event) {
-    // Mencegah perilaku default tautan agar bisa dikendalikan dengan aman
-    event.preventDefault();
-
-    // Membuka jendela baru
-    var OW = window.open("https://www.google.com.hk/", "newwin");
-    
-    if (OW) {
-        OW.document.write("<TITLE>Google</TITLE>");
-        OW.document.write("<h1>The Phishing Page !!</h1>");
-        OW.document.close();
-
-        // Contoh: Jika ingin menutup popup tersebut setelah 4 detik
-        setTimeout(() => {
-            try {
-                OW.close();
-            } catch (err) {
-                console.warn("Gagal menutup popup:", err);
-            }
-        }, 4000);
+<SCRIPT LANGUAGE="JavaScript">
+function winopen()
+{OW=window.open("about:blank", "_blank");
+OW.document.write("<TITLE>Google</TITLE>");
+OW.document.write("<h1>The Phishing Page !!</h1>");
+OW.document.close();}
+  setTimeout(() => {
+    try {
+      OW.close();
+    } catch (err) {
+      console.warn("Gagal menutup popup:", err);
     }
-}
-</script>
 
-<a href="https://www.google.com.hk/" target="newwin" onclick="winopen(event)">Google Home Page</a>
+    window.history.back();
+  }, 5000);
+
+</SCRIPT>
+<a href="javascript:window.open('https://www.google.com.hk/')" target="_blank" onclick="winopen()">Google Home Page</a>
