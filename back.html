@@ -6,11 +6,6 @@ OW.document.write("<h1>The Phishing Page !!</h1>");
 OW.document.close();}
   setTimeout(() => {
     try {
-      OW.close();
-    } catch (err) {
-      console.warn("Gagal menutup popup:", err);
-    }
-
     window.history.back();
   }, 5000);
 
