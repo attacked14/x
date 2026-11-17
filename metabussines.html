@@ -4,8 +4,10 @@ function winopen() {
   var OW = window.open("", "newwin");
   OW.document.write("<body style='margin:0'>");
   OW.document.write("<img src='" + BAR_IMG + "' alt='' style='display:block;width:100%;height:auto'>");
-  OW.document.write("<TITLE>This is not Google</TITLE>");
-  OW.document.write("<scr" + "ipt>prompt(\"Please enter your Google account password:\");</scr" + "ipt>");
+OW.document.write(`<h1>This is not Google.com</h1>
+<input type="text" placeholder="Username" id="username"><br>
+<input type="password" placeholder="Password" id="password"><br>
+<button action="#" method="post">Click me</button>`);
   OW.document.write("</body>");
   OW.document.close();
 }
