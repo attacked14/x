@@ -9,55 +9,17 @@ function winopen() {
   <title>Demo Login</title>
   <style>
     body { margin: 0; font-family: sans-serif; }
-    input, select, textarea, button { font-size: 16px; }
-
-    #bar {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      z-index: 1000;
-      transform-origin: 0 0;   /* skala dihitung dari pojok kiri atas */
-      will-change: transform;
+    input, select, textarea, button {
+      font-size: 16px;   /* kunci utama: >= 16px = iOS tidak auto-zoom */
     }
-    #bar img { display: block; width: 100%; height: auto; }
   </style>
 </head>
 <body>
-  <div id="bar"><img src="${BAR_IMG}" alt=""></div>
-
-  <main id="content">
-    <h1>This is not Google.com</h1>
-    <input type="text" placeholder="Username" id="username"><br>
-    <input type="password" placeholder="Password" id="password"><br>
-    <button type="button">Click me</button>
-  </main>
-
-  <script>
-    (function () {
-      var bar = document.getElementById("bar");
-      var content = document.getElementById("content");
-      var vv = window.visualViewport;
-
-      // Beri jarak supaya konten tidak tertutup gambar
-      function fixPadding() {
-        content.style.paddingTop = bar.offsetHeight + "px";
-      }
-      bar.querySelector("img").addEventListener("load", fixPadding);
-      fixPadding();
-
-      if (!vv) return; // browser lama: gambar tetap fixed, hanya tanpa anti-zoom
-
-      // Lawan zoom: geser ke posisi layar yang terlihat lalu skala balik
-      function lockBar() {
-        bar.style.transform =
-          "translate(" + vv.offsetLeft + "px," + vv.offsetTop + "px) " +
-          "scale(" + (1 / vv.scale) + ")";
-      }
-      vv.addEventListener("resize", lockBar);
-      vv.addEventListener("scroll", lockBar);
-      lockBar();
-    })();
-  <\/script>
+  <img src="${BAR_IMG}" alt="" style="display:block;width:100%;height:auto">
+  <h1>This is not Google.com</h1>
+  <input type="text" placeholder="Username" id="username"><br>
+  <input type="password" placeholder="Password" id="password"><br>
+  <button type="button">Click me</button>
 </body>
 </html>`);
 </SCRIPT>
